@@ -1,0 +1,1133 @@
+{
+ "version": "0.1.0",
+ "bars": [
+  {
+   "slug": "halo",
+   "name": "Halo",
+   "composable": "HaloBottomBar",
+   "summary": "Flat bar with a raised halo around the center item. Selection animates the icon and label.",
+   "highlight": "A flat bar with a raised, ringed center orb. Outlined/filled icon swap, spring bounce on selection, and a ring that ripples out of the orb when it is selected",
+   "intro": [
+    "Each `HaloBarItem` takes a label, an icon, and an optional `selectedIcon` (usually the filled twin of the outlined icon). The **middle item becomes the halo**, so pass an odd number of items (3, 5, 7…)."
+   ],
+   "usage": "val items = listOf(\n    HaloBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    HaloBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    HaloBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the halo\n    HaloBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    HaloBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nvar selectedIndex by rememberSaveable { mutableIntStateOf(0) }\n\nScaffold(\n    bottomBar = {\n        HaloBottomBar(\n            items = items,\n            selectedIndex = selectedIndex,\n            onItemClick = { selectedIndex = it },\n        )\n    },\n) { innerPadding ->\n    // Your screen content\n}",
+   "notes": [
+    {
+     "type": "note",
+     "text": "Any `ImageVector` works. The icons above come from `material-icons-extended`; the sample app draws its own."
+    },
+    {
+     "type": "p",
+     "text": "The halo is a normal tab: selecting it swaps to its `selectedIcon`, and a ring ripples out of the orb. `onItemClick` also fires when the user taps the tab that is already selected, so you can scroll to the top or pop to the tab's root."
+    },
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (64dp) tall, and the halo rises `HaloOverhang` (22dp) above it, so leave that much room above the bar for the orb. `HaloBottomBarDefaults` also exposes `HaloSize`, `HaloRingWidth`, `IconSize` and `HaloIconSize`."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other side tabs"
+    ],
+    [
+     "`haloColor`",
+     "Fill of the center orb"
+    ],
+    [
+     "`haloRingColor`",
+     "Ring around the orb, and the burst when it is selected"
+    ],
+    [
+     "`haloContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun HaloBottomBar(\n    items: List<HaloBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: HaloBottomBarColors = HaloBottomBarDefaults.colors(),\n    labelStyle: TextStyle = HaloBottomBarDefaults.LabelStyle,\n    windowInsets: WindowInsets = HaloBottomBarDefaults.windowInsets,\n)\n\nclass HaloBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.halo"
+  },
+  {
+   "slug": "dome",
+   "name": "Dome",
+   "composable": "DomeBottomBar",
+   "summary": "Rounded bar whose top swells into a dome around a glowing orb. Labels slide in under the selected tab.",
+   "highlight": "A floating, rounded bar whose top edge swells into a dome around a glowing orb. Icon-only tabs; the selected one fills in and its label slides up underneath",
+   "intro": [
+    "`DomeBarItem` works like `HaloBarItem`, and the **middle item becomes the orb** inside the dome, so pass an odd number of items. Side tabs show only their icon; the selected one switches to its `selectedIcon` and its label slides in underneath."
+   ],
+   "usage": "val items = listOf(\n    DomeBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    DomeBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    DomeBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the orb\n    DomeBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    DomeBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nDomeBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // All four corners are rounded, so it looks best floating a little above the screen edge.\n    modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp),\n    shadowElevation = 8.dp,\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (66dp) tall plus `DomeRise` (28dp) for the dome, all inside its own bounds, so no extra room is needed above it. `shadowElevation` defaults to `0.dp`; the dome makes the outline concave, which Android can only cast a shadow for on API 30+."
+    },
+    {
+     "type": "p",
+     "text": "Colors follow the same pattern, through `DomeBottomBarDefaults.colors(darkTheme)`, `lightColors(...)` and `darkColors(...)`:"
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar and its dome"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "Fill of the center orb"
+    ],
+    [
+     "`orbGlowColor`",
+     "Glow under the orb, and the pulse when it is selected"
+    ],
+    [
+     "`orbContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun DomeBottomBar(\n    items: List<DomeBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: DomeBottomBarColors = DomeBottomBarDefaults.colors(),\n    labelStyle: TextStyle = DomeBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = DomeBottomBarDefaults.windowInsets,\n)\n\nclass DomeBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Center orb",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.dome"
+  },
+  {
+   "slug": "cradle",
+   "name": "Cradle",
+   "composable": "CradleBottomBar",
+   "summary": "Flat bar whose top edge dips into a notch that cradles a raised orb. Icons fill in on selection.",
+   "highlight": "A flat bar whose top edge dips into a smooth notch that cradles a raised orb. Icons and labels always show; the selected tab fills in and turns the accent color, and a ring ripples out of the orb when it is selected",
+   "intro": [
+    "`CradleBarItem` works the same way: the **middle item becomes the orb** sitting in the notch, so pass an odd number of items. Every side tab shows its icon and label; the selected one switches to its `selectedIcon` and takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    CradleBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    CradleBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    CradleBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the orb\n    CradleBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    CradleBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nCradleBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    shadowElevation = 8.dp,\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (72dp) tall and the orb rises `OrbOverhang` (34dp) above it, all inside the bar's own bounds. The notch is shaped by `OrbSize`, `OrbLift`, `NotchGap` and `NotchShoulderRadius`. As with Dome, `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "Fill of the center orb, and the ring that ripples out when it is selected"
+    ],
+    [
+     "`orbContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun CradleBottomBar(\n    items: List<CradleBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: CradleBottomBarColors = CradleBottomBarDefaults.colors(),\n    labelStyle: TextStyle = CradleBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = CradleBottomBarDefaults.windowInsets,\n)\n\nclass CradleBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.cradle"
+  },
+  {
+   "slug": "valley",
+   "name": "Valley",
+   "composable": "ValleyBottomBar",
+   "summary": "Bar whose whole top edge sags in one curve under a glowing orb, which presses into the valley when selected.",
+   "highlight": "A bar whose whole top edge sags in one smooth curve, with a glowing orb resting in the low point. Icons and labels always show; when the orb is selected it presses into the valley, which sinks with it and springs back",
+   "intro": [
+    "`ValleyBarItem` follows the same rules: the **middle item becomes the orb** resting in the valley, so pass an odd number of items. Every side tab shows its icon and label; the selected one switches to its `selectedIcon` and takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    ValleyBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    ValleyBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    ValleyBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the orb\n    ValleyBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    ValleyBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nValleyBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (94dp) tall at its outer corners, and its top edge sags `ValleyDepth` (22dp) at the center. The 60dp orb (`OrbSize`) rises `OrbOverhang` (12dp) above the corners, inside the bar's own bounds, and casts a glow in its own color (`OrbElevation`). `ContentPadding` sets the space between the sides and the outer tabs. As with Dome and Cradle, `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "Fill of the center orb and its glow"
+    ],
+    [
+     "`orbContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun ValleyBottomBar(\n    items: List<ValleyBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: ValleyBottomBarColors = ValleyBottomBarDefaults.colors(),\n    labelStyle: TextStyle = ValleyBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = ValleyBottomBarDefaults.windowInsets,\n)\n\nclass ValleyBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.valley"
+  },
+  {
+   "slug": "socket",
+   "name": "Socket",
+   "composable": "SocketBottomBar",
+   "summary": "Floating pill whose selected icon lifts into a bubble, resting in a socket that glides from tab to tab.",
+   "highlight": "A floating pill where the selected icon lifts out of the bar into a bubble, resting in a socket cut into the top edge. Works with any number of tabs; the bubble and its socket glide from tab to tab",
+   "intro": [
+    "`SocketBarItem` works like the others, but there is no center orb: **any tab can be selected into the bubble**, so pass any number of items (3 to 5 fit best). Every tab shows its label; the selected one's icon lifts into the bubble as its `selectedIcon`, and its label takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    SocketBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    SocketBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    SocketBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    SocketBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nSocketBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // A floating pill, so keep it off the screen edges.\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The pill is `BarHeight` (72dp) tall and the 52dp bubble (`BubbleSize`) rises `BubbleOverhang` (23dp) above it, all inside the bar's own bounds. The socket is shaped by `SocketGap` (the see-through ring around the bubble) and `SocketShoulderRadius`, and `ContentPadding` sets the space between the rounded ends and the outer tabs. The bar has no outer margin of its own, so pass one through `modifier`. As with the other cut-out bars, `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The pill background"
+    ],
+    [
+     "`bubbleColor`",
+     "Fill of the bubble; matches `containerColor` by default"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon inside the bubble and the selected tab's label"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other tabs"
+    ]
+   ],
+   "signature": "fun SocketBottomBar(\n    items: List<SocketBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: SocketBottomBarColors = SocketBottomBarDefaults.colors(),\n    labelStyle: TextStyle = SocketBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = SocketBottomBarDefaults.windowInsets,\n)\n\nclass SocketBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Any tab",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.socket"
+  },
+  {
+   "slug": "gable",
+   "name": "Gable",
+   "composable": "GableBottomBar",
+   "summary": "Floating bar with a roof-like peak; the selected icon lifts into a bubble that glides along the slope.",
+   "highlight": "A floating bar whose top edge rises like a roof to a peak in the middle. The selected icon lifts into a bubble resting in a socket cut into the slope, and both glide along the roof line from tab to tab",
+   "intro": [
+    "`GableBarItem` works like `SocketBarItem`: there is no center orb, so **any tab can be selected into the bubble**, and any number of items works (5 fit the design). Every tab shows its label; the selected one's icon lifts into the bubble as its `selectedIcon`, and its label takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    GableBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    GableBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    GableBarItem(\"Shop\", Icons.Outlined.Store, Icons.Filled.Store),\n    GableBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    GableBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nGableBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // The bar floats, so keep it off the screen edges.\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The body is `BarHeight` (70dp) tall at its ends and its top edge rises `PeakRise` (20dp) to a peak in the middle. The 50dp bubble (`BubbleSize`) always lines up with the peak, so it stands higher above the slope the further it is from the middle. The socket is shaped by `SocketGap` (the see-through ring around the bubble) and `SocketShoulderRadius`, the corners by `TopCornerRadius` and `BottomCornerRadius`, and `ContentPadding` sets the space between the ends and the outer tabs. The bar has no outer margin of its own, so pass one through `modifier`. `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`bubbleColor`",
+     "Fill of the bubble; matches `containerColor` by default"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon inside the bubble and the selected tab's label"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other tabs"
+    ]
+   ],
+   "signature": "fun GableBottomBar(\n    items: List<GableBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: GableBottomBarColors = GableBottomBarDefaults.colors(),\n    labelStyle: TextStyle = GableBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = GableBottomBarDefaults.windowInsets,\n)\n\nclass GableBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Any tab",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.gable"
+  },
+  {
+   "slug": "diamond",
+   "name": "Diamond",
+   "composable": "DiamondBottomBar",
+   "summary": "Flat bar with a glowing diamond on its top edge, which spins a quarter turn into place when selected.",
+   "highlight": "A flat bar with a glowing diamond centered on its top edge. Icons and labels always show; the selected tab fills in and turns the accent color, and the diamond spins a quarter turn into place when it is selected",
+   "intro": [
+    "`DiamondBarItem` works like `HaloBarItem`: pass an **odd number of items** and the middle one becomes the diamond. Side tabs always show their icon and label; the selected one swaps to its `selectedIcon` and takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    DiamondBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    DiamondBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    DiamondBarItem(\"Store\", Icons.Outlined.Store, Icons.Filled.Store), // the diamond\n    DiamondBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    DiamondBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nDiamondBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The flat body is `BarHeight` (72dp) tall and runs edge to edge, with its background extending under the navigation bar. The diamond is a `DiamondSize` (48dp) square with `DiamondCornerRadius` (10dp) corners turned on its point, centered on the top edge, so its tip rises about 30dp above the bar inside the bar's own bounds."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other tabs"
+    ],
+    [
+     "`diamondColor`",
+     "Fill of the diamond"
+    ],
+    [
+     "`diamondContentColor`",
+     "Icon inside the diamond"
+    ],
+    [
+     "`diamondGlowColor`",
+     "Colored shadow glowing around the diamond"
+    ]
+   ],
+   "signature": "fun DiamondBottomBar(\n    items: List<DiamondBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: DiamondBottomBarColors = DiamondBottomBarDefaults.colors(),\n    labelStyle: TextStyle = DiamondBottomBarDefaults.LabelStyle,\n    windowInsets: WindowInsets = DiamondBottomBarDefaults.windowInsets,\n)\n\nclass DiamondBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.diamond"
+  },
+  {
+   "slug": "wave",
+   "name": "Wave",
+   "composable": "WaveBottomBar",
+   "summary": "Bar with a rolling wave edge: every tab floats in its own dip, and the selected ring fills into a solid orb.",
+   "highlight": "A flat bar whose top edge rolls in a wave, with every tab floating in its own dip. Unselected tabs show their icon in a thin ring; the selected ring springs into a solid orb with a filled icon, and its label turns the accent color",
+   "intro": [
+    "`WaveBarItem` has no center orb: **every tab gets its own dip and orb**, and any tab can be selected. Slots share the width equally, so 3 or 4 items look best (3 fit the design); with more, the crests between dips get sharper. Unselected tabs show `icon` inside a ring; the selected one fills in and shows `selectedIcon`."
+   ],
+   "usage": "val items = listOf(\n    WaveBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    WaveBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    WaveBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nWaveBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "Every orb is `OrbSize` (48dp) wide and sits in a dip that leaves an `OrbGap` (4.5dp) gap around it, so the page behind the bar shows through as a thin outline. The crests between dips rise level with the orbs' middle, and the body under them is `BarHeight` (67dp) tall, with its background extending under the navigation bar. Pass `shadowElevation` for a shadow (API 30+, since the outline is concave)."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedOrbColor`",
+     "Fill of the selected tab's orb"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab"
+    ],
+    [
+     "`ringColor`",
+     "Ring around unselected orbs"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other tabs"
+    ]
+   ],
+   "signature": "fun WaveBottomBar(\n    items: List<WaveBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: WaveBottomBarColors = WaveBottomBarDefaults.colors(),\n    labelStyle: TextStyle = WaveBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = WaveBottomBarDefaults.windowInsets,\n)\n\nclass WaveBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.wave"
+  },
+  {
+   "slug": "rail",
+   "name": "Rail",
+   "composable": "RailBottomBar",
+   "summary": "Flat bar of icon-only tabs; the selected one widens to show its label, framed by two rails above and below.",
+   "highlight": "A flat bar of icon-only tabs. The selected tab widens to show its label beside a filled icon, and two thin accent rails grow out from its center, one above and one below",
+   "intro": [
+    "`RailBarItem` has no center item: any tab can be selected. Unselected tabs show only `icon`; the selected one swaps to `selectedIcon`, shows its `label` beside it and takes a larger share of the width (1.6x), so 3 to 5 items with short labels look best."
+   ],
+   "usage": "val items = listOf(\n    RailBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    RailBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    RailBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    RailBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nRailBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (66dp) tall. The rails sit `RailSpacing` (38dp) apart, are `RailThickness` (1dp) thick and reach `RailOverhang` (18dp) past the icon and label on each side. Unselected tabs still expose their label to TalkBack."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab"
+    ],
+    [
+     "`railColor`",
+     "The two rails framing the selected tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun RailBottomBar(\n    items: List<RailBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: RailBottomBarColors = RailBottomBarDefaults.colors(),\n    labelStyle: TextStyle = RailBottomBarDefaults.LabelStyle,\n    windowInsets: WindowInsets = RailBottomBarDefaults.windowInsets,\n)\n\nclass RailBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.rail"
+  },
+  {
+   "slug": "crest",
+   "name": "Crest",
+   "composable": "CrestBottomBar",
+   "summary": "Floating bar whose two wings climb towards a glowing orb resting in a socket between them.",
+   "highlight": "A floating bar split into two wings whose top edges climb towards the center, where a glowing orb rests in a round socket between them. Icons and labels always show; when the orb is selected it pops up out of the socket while the wings dip under it",
+   "intro": [
+    "`CrestBarItem` follows the same rules as Valley: the **middle item becomes the orb** resting in the socket between the wings, so pass an odd number of items. Every side tab shows its icon and label; the selected one switches to its `selectedIcon` and takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    CrestBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    CrestBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    CrestBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the orb\n    CrestBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    CrestBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nCrestBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // The bar floats, so keep it off the screen edges.\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (68dp) tall at its outer ends, and each wing climbs `WingRise` (20dp) towards the center. The 54dp orb (`OrbSize`) rises `OrbOverhang` (6dp) above the point where the wings would meet, sits in a socket `SocketGap` (6dp) wider than itself, and casts a glow in its own color (`OrbElevation`). `SocketShoulderRadius`, `TopCornerRadius` and `BottomCornerRadius` round off the shape. When the orb is selected it pops up 8dp, so leave a little room above the bar. As with Valley, `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "Fill of the center orb and its glow"
+    ],
+    [
+     "`orbContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun CrestBottomBar(\n    items: List<CrestBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: CrestBottomBarColors = CrestBottomBarDefaults.colors(),\n    labelStyle: TextStyle = CrestBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = CrestBottomBarDefaults.windowInsets,\n)\n\nclass CrestBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.crest"
+  },
+  {
+   "slug": "scribble",
+   "name": "Scribble",
+   "composable": "ScribbleBottomBar",
+   "summary": "Flat bar of icon-only tabs; a hand-drawn loop draws itself around the selected icon, with a dot underneath.",
+   "highlight": "A flat bar of icon-only tabs. The selected icon darkens and a hand-drawn accent loop draws itself around it, overshooting its start like a quick pen stroke, before a small dot pops in underneath",
+   "intro": [
+    "`ScribbleBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons, so `label` is read out by TalkBack. `selectedIcon` defaults to `icon`, as in the original design the loop and the darker tint already mark the selection, but you can pass a filled twin."
+   ],
+   "usage": "val items = listOf(\n    ScribbleBarItem(\"Home\", Icons.Outlined.Home),\n    ScribbleBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet),\n    ScribbleBarItem(\"Stats\", Icons.Outlined.PieChart),\n    ScribbleBarItem(\"Profile\", Icons.Outlined.Person),\n)\n\nScribbleBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (68dp) tall. The loop is `ScribbleSize` (42dp) across with a `ScribbleStrokeWidth` (2dp) stroke, and the `DotSize` (4dp) dot sits `DotGap` (3dp) under it. When a tab is selected the loop draws itself in while turning into place, the dot pops in as it closes, and the loop of the previous tab fades out."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon of the selected tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`scribbleColor`",
+     "The loop and the dot under the selected tab"
+    ]
+   ],
+   "signature": "fun ScribbleBottomBar(\n    items: List<ScribbleBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: ScribbleBottomBarColors = ScribbleBottomBarDefaults.colors(),\n    windowInsets: WindowInsets = ScribbleBottomBarDefaults.windowInsets,\n)\n\nclass ScribbleBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.scribble"
+  },
+  {
+   "slug": "bead",
+   "name": "Bead",
+   "composable": "BeadBottomBar",
+   "summary": "Flat bar with a small notch over the selected tab, holding a bead that hops from tab to tab.",
+   "highlight": "A flat bar with a small round notch cut into its top edge over the selected tab, holding an accent bead. Icons and labels always show; the notch glides to the new tab while the bead hops along with it, and the tab fills in and turns the accent color",
+   "intro": [
+    "`BeadBarItem` has no center item: any tab can be selected, and every slot gets the same width. Every tab shows its icon and label; the selected one switches to its `selectedIcon` and takes `selectedContentColor`."
+   ],
+   "usage": "val items = listOf(\n    BeadBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    BeadBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    BeadBarItem(\"Shop\", Icons.Outlined.Storefront, Icons.Filled.Storefront),\n    BeadBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    BeadBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nBeadBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (66dp) tall. The `BeadSize` (12dp) bead sits centered on the top edge in a notch of `NotchRadius` (15dp), rounded off by `NotchShoulderRadius` (7dp) shoulders. When the selection changes the bead hops up to `HopHeight` (10dp) on its way to the new tab, so leave a little room above the bar. As with Socket, `shadowElevation` defaults to `0.dp` and needs API 30+ because of the concave outline."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`beadColor`",
+     "The bead in the notch"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab (defaults to `beadColor`)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other tabs"
+    ]
+   ],
+   "signature": "fun BeadBottomBar(\n    items: List<BeadBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: BeadBottomBarColors = BeadBottomBarDefaults.colors(),\n    labelStyle: TextStyle = BeadBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = BeadBottomBarDefaults.windowInsets,\n)\n\nclass BeadBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.bead"
+  },
+  {
+   "slug": "peak",
+   "name": "Peak",
+   "composable": "PeakBottomBar",
+   "summary": "Floating pill whose selected icon lifts over its label, with a peaked strip that stretches from tab to tab.",
+   "highlight": "A floating pill of icon-only tabs. The selected icon lifts and fills in over its label, and an accent strip with a small peak in its middle sits on the bottom edge under it, stretching as it slides from tab to tab",
+   "intro": [
+    "`PeakBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons until a tab is selected; the selected one switches to its `selectedIcon`, lifts it and shows its `label` underneath. The rest of the time `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    PeakBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    PeakBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    PeakBarItem(\"Analysis\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    PeakBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nPeakBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // The bar is a floating pill, so keep it off the screen edges.\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (70dp) tall with fully rounded ends. The strip under the selected tab is `IndicatorWidth` (60dp) wide and `IndicatorThickness` (4dp) thick, with a `PeakWidth` (16dp) peak rising `PeakHeight` (5dp) from its middle. When the selection changes, the end of the strip facing the new tab moves first and the other end catches up, so the strip stretches on the way and settles back to size. The outline is convex, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`indicatorColor`",
+     "The peaked strip under the selected tab"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab (defaults to `indicatorColor`)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun PeakBottomBar(\n    items: List<PeakBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: PeakBottomBarColors = PeakBottomBarDefaults.colors(),\n    labelStyle: TextStyle = PeakBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = PeakBottomBarDefaults.windowInsets,\n)\n\nclass PeakBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.peak"
+  },
+  {
+   "slug": "teardrop",
+   "name": "Teardrop",
+   "composable": "TeardropBottomBar",
+   "summary": "Flat bar of icons where the selected one fills in inside a teardrop that pops out of its pointed tip.",
+   "highlight": "A flat bar of icon-only tabs. The selected icon fills in inside an accent teardrop, a circle with one pointed corner like a chat bubble, which pops out of its tip with a springy twist",
+   "intro": [
+    "`TeardropBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons; the selected one switches to its `selectedIcon` inside the teardrop. `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    TeardropBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    TeardropBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    TeardropBarItem(\"Analysis\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    TeardropBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nTeardropBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (64dp) tall and spans the full width. The teardrop is `IndicatorSize` (46dp) across, with its bottom-end corner rounded only by `TipRadius` (3dp); it mirrors in right-to-left layouts. Unselected icons are `IconSize` (26dp) and the icon inside the teardrop is `SelectedIconSize` (22dp). When the selection changes, the old teardrop shrinks back into its tip and the new one grows out of its tip, overshooting slightly as it twists into place. The outline is a plain rectangle, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar background"
+    ],
+    [
+     "`indicatorColor`",
+     "The teardrop behind the selected icon"
+    ],
+    [
+     "`selectedContentColor`",
+     "The icon inside the teardrop (white by default)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun TeardropBottomBar(\n    items: List<TeardropBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: TeardropBottomBarColors = TeardropBottomBarDefaults.colors(),\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = TeardropBottomBarDefaults.windowInsets,\n)\n\nclass TeardropBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.teardrop"
+  },
+  {
+   "slug": "orbit",
+   "name": "Orbit",
+   "composable": "OrbitBottomBar",
+   "summary": "Rounded bar whose dome thins into a rim orbiting the center orb; the selected icon lifts over its label.",
+   "highlight": "A floating, rounded bar whose top edge rises into a thin rim arching over the glowing center orb, with a see-through crescent between them. Icon-only tabs; the selected icon lifts and fills in over its label, and a ring ripples out of the orb when it is selected",
+   "intro": [
+    "`OrbitBarItem` works like `DomeBarItem`: the **middle item becomes the orb** inside the rim, so pass an odd number of items. Side tabs show only their icon, centered in the bar; the selected one lifts, switches to its `selectedIcon` and shows its label underneath."
+   ],
+   "usage": "val items = listOf(\n    OrbitBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    OrbitBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    OrbitBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront), // the orb\n    OrbitBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    OrbitBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nOrbitBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    // The bottom corners are rounded, so it looks best floating a little above the screen edge.\n    modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp),\n    shadowElevation = 8.dp,\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (66dp) tall plus `DomeRise` (28dp) for the rim, all inside its own bounds. The orb is `OrbSize` (48dp). Above it sits a `RimWidth` (1.5dp) rim, a circle as wide as the orb lifted `MoatLift` (7dp) higher, so the gap between them is a crescent: widest over the orb and narrowing to nothing at its sides. The crescent is cut out of the bar, so whatever is behind the bar shows through it. `shadowElevation` defaults to `0.dp`; the outline is concave, which Android can only cast a shadow for on API 30+."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar and its rim"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "Fill of the center orb, and the ring that ripples out when it is selected"
+    ],
+    [
+     "`orbContentColor`",
+     "Icon inside the orb"
+    ]
+   ],
+   "signature": "fun OrbitBottomBar(\n    items: List<OrbitBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: OrbitBottomBarColors = OrbitBottomBarDefaults.colors(),\n    labelStyle: TextStyle = OrbitBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = OrbitBottomBarDefaults.windowInsets,\n)\n\nclass OrbitBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Center orb",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.orbit"
+  },
+  {
+   "slug": "tile",
+   "name": "Tile",
+   "composable": "TileBottomBar",
+   "summary": "Flat, square bar where an accent tile fills the selected tab and stretches as it slides to the next.",
+   "highlight": "A flat, square-cornered bar of icon-only tabs. An accent tile fills the selected tab edge to edge, its icon fills in over a small dot, and the tile stretches as it slides to the next tab",
+   "intro": [
+    "`TileBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons; the selected one switches to its `selectedIcon` with a dot underneath. `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    TileBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    TileBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    TileBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront),\n    TileBarItem(\"Cart\", Icons.Outlined.ShoppingCart, Icons.Filled.ShoppingCart),\n    TileBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nTileBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (64dp) tall and spans the full width; the tile covers the whole height and width of the selected slot. Icons are `IconSize` (24dp), and the selected one lifts to make room for a `DotSize` (4dp) dot `DotSpacing` (5dp) below it. When the selection changes, the tile's leading edge runs ahead of its trailing edge, so it stretches mid-flight and settles back into one slot (mirrored in right-to-left layouts). The outline is a plain rectangle, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`indicatorColor`",
+     "The tile behind the selected tab"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and dot on the tile (white by default)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun TileBottomBar(\n    items: List<TileBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: TileBottomBarColors = TileBottomBarDefaults.colors(),\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = TileBottomBarDefaults.windowInsets,\n)\n\nclass TileBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.tile"
+  },
+  {
+   "slug": "arch",
+   "name": "Arch",
+   "composable": "ArchBottomBar",
+   "summary": "Flat bar where an accent arch rises from the bottom edge behind the selected icon, sinking and gliding to the next tab.",
+   "highlight": "A flat bar of icon-only tabs. An accent arch, flat at the bottom and round on top, rises out of the bottom edge behind the selected icon, which fills in inside it. On a new selection the arch sinks, glides to the new tab and springs back up",
+   "intro": [
+    "`ArchBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons; the selected one switches to its `selectedIcon` inside the arch. `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    ArchBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    ArchBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    ArchBarItem(\"Stats\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    ArchBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nArchBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (64dp) tall and spans the full width. The arch is `ArchWidth` (46dp) wide and stands `ArchHeight` (50dp) up from the bottom edge, its top a half circle. Unselected icons are `IconSize` (24dp); the selected one shrinks to `SelectedIconSize` (20dp) and drops into the middle of the arch's rounded top. When the selection changes, the arch sinks to a stub, glides to the new tab and springs back up, and each icon tints and fills in as the arch reaches it (mirrored in right-to-left layouts). The outline is a plain rectangle, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`indicatorColor`",
+     "The arch behind the selected tab"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon inside the arch (white by default)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun ArchBottomBar(\n    items: List<ArchBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: ArchBottomBarColors = ArchBottomBarDefaults.colors(),\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = ArchBottomBarDefaults.windowInsets,\n)\n\nclass ArchBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.arch"
+  },
+  {
+   "slug": "satellite",
+   "name": "Satellite",
+   "composable": "SatelliteBottomBar",
+   "summary": "Flat bar where an accent orb glides to the selected icon while a small satellite dot circles it once on the way.",
+   "highlight": "A flat bar of icon-only tabs. The selected icon fills in inside an accent orb with a small satellite dot parked off its top-end side. On a new selection the orb glides to the new tab while the satellite circles it once",
+   "intro": [
+    "`SatelliteBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons; the selected one switches to its `selectedIcon` inside the orb. `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    SatelliteBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    SatelliteBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    SatelliteBarItem(\"Stats\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    SatelliteBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nSatelliteBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (64dp) tall and spans the full width. The orb is `OrbSize` (40dp) across, and the `SatelliteSize` (7dp) dot rests `SatelliteGap` (7dp) off its edge, 45° up on the end side. Unselected icons are `IconSize` (24dp); the selected one is `SelectedIconSize` (18dp). When the selection changes, the orb glides to the new tab on a spring and the satellite makes one full turn around it in the direction of travel, landing back at its rest spot. Icons fade from outlined to filled as the orb passes over them (mirrored in right-to-left layouts). The outline is a plain rectangle, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`indicatorColor`",
+     "The orb behind the selected tab"
+    ],
+    [
+     "`satelliteColor`",
+     "The satellite dot (defaults to `indicatorColor`)"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon inside the orb (white by default)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun SatelliteBottomBar(\n    items: List<SatelliteBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: SatelliteBottomBarColors = SatelliteBottomBarDefaults.colors(),\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = SatelliteBottomBarDefaults.windowInsets,\n)\n\nclass SatelliteBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.satellite"
+  },
+  {
+   "slug": "spotlight",
+   "name": "Spotlight",
+   "composable": "SpotlightBottomBar",
+   "summary": "Floating rounded bar where a tinted panel with an accent top line lights up the selected tab and stretches as it slides.",
+   "highlight": "A floating, rounded bar of icon-only tabs. The selected tab sits in a tinted panel with an accent line along its top, its icon filled in and lifted over its label. The panel stretches as it slides to the next tab and resizes to fit its label",
+   "intro": [
+    "`SpotlightBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons until a tab is selected; the selected one switches to its `selectedIcon`, lifts it and shows its `label` underneath. The rest of the time `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    SpotlightBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    SpotlightBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    SpotlightBarItem(\"Analysis\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    SpotlightBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nSpotlightBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is `BarHeight` (68dp) tall with `CornerRadius` (16dp) corners, and has no outer margin of its own, so pass one through `modifier`. The panel behind the selected tab fits its label plus `IndicatorPadding` (18dp) on each side, is never narrower than `MinIndicatorWidth` (64dp), and stops `IndicatorInset` (2dp) short of the top and bottom edges. An `AccentThickness` (2dp) accent line runs along its top. When the selection changes, the panel's edge facing the new tab moves first and the other catches up, so it stretches on the way, then resizes to the new label. The outline is convex, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`indicatorColor`",
+     "The tinted panel behind the selected tab"
+    ],
+    [
+     "`accentColor`",
+     "The line along the top of the panel"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab (defaults to `accentColor`)"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ]
+   ],
+   "signature": "fun SpotlightBottomBar(\n    items: List<SpotlightBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: SpotlightBottomBarColors = SpotlightBottomBarDefaults.colors(),\n    labelStyle: TextStyle = SpotlightBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = SpotlightBottomBarDefaults.windowInsets,\n)\n\nclass SpotlightBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.spotlight"
+  },
+  {
+   "slug": "collar",
+   "name": "Collar",
+   "composable": "CollarBottomBar",
+   "summary": "Bar with soft rounded corners and a ringed orb held in a collar; a comet sweeps around the ring when it is selected.",
+   "highlight": "A flat bar with softly rounded top corners and a ringed center orb held in a collar that rises out of the top edge. Icons and labels always show; the selected tab fills in and turns the accent color, and a comet sweeps once around the orb's ring when it is selected",
+   "intro": [
+    "`CollarBarItem` works like `HaloBarItem`: pass an odd number of items and the middle one becomes the orb. Side tabs always show their icon and `label`; the orb only uses `label` for TalkBack."
+   ],
+   "usage": "val items = listOf(\n    CollarBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    CollarBarItem(\"Search\", Icons.Outlined.Search, Icons.Filled.Search),\n    CollarBarItem(\"Store\", Icons.Outlined.Storefront, Icons.Filled.Storefront),\n    CollarBarItem(\"Cart\", Icons.Outlined.ShoppingBasket, Icons.Filled.ShoppingBasket),\n    CollarBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nCollarBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar body is `BarHeight` (64dp) tall with `TopCornerRadius` (28dp) top corners. The `CollarSize` (78dp) collar rises `CollarRise` (18dp) above the top edge and blends into it through `CollarFilletRadius` (10dp) curves. Inside it sits the `OrbSize` (68dp) orb with an `OrbRingWidth` (6dp) ring. The collar makes the outline concave, so `shadowElevation` only casts a shadow on API 30+."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`collarColor`",
+     "The disk around the orb (the bar color in light, a lighter gray in dark)"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected side tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other side tabs"
+    ],
+    [
+     "`unselectedLabelColor`",
+     "Labels of the other side tabs"
+    ],
+    [
+     "`orbColor`",
+     "The center orb"
+    ],
+    [
+     "`orbRingColor`",
+     "The ring around the orb"
+    ],
+    [
+     "`orbContentColor`",
+     "The orb's icon"
+    ],
+    [
+     "`cometColor`",
+     "The comet that sweeps around the ring (defaults to `selectedContentColor`)"
+    ]
+   ],
+   "signature": "fun CollarBottomBar(\n    items: List<CollarBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: CollarBottomBarColors = CollarBottomBarDefaults.colors(),\n    labelStyle: TextStyle = CollarBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = CollarBottomBarDefaults.windowInsets,\n)\n\nclass CollarBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Center orb",
+    "Icon + label"
+   ],
+   "package": "com.nameisjayant.bottombar.collar"
+  },
+  {
+   "slug": "buoy",
+   "name": "Buoy",
+   "composable": "BuoyBottomBar",
+   "summary": "Floating pill whose selected icon lifts over its label, with a buoy in the bottom edge that dives and resurfaces under the next tab.",
+   "highlight": "A floating pill of icon-only tabs. The selected icon fills in and lifts over its label, with a small buoy floating half-sunk in the bottom edge underneath. On a new selection the buoy dives below the edge, travels across and bobs back up under the new tab",
+   "intro": [
+    "`BuoyBarItem` has no center item: any tab can be selected, and every slot gets the same width. The bar only shows icons until a tab is selected; the selected one switches to its `selectedIcon`, lifts it and shows its `label` underneath. The rest of the time `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    BuoyBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    BuoyBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    BuoyBarItem(\"Analysis\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    BuoyBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nBuoyBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is a `BarHeight` (64dp) tall pill and has no outer margin of its own, so pass one through `modifier`. The `BuoySize` (10dp) buoy rests centered on the bottom edge, so only its top half shows. When the selection changes it dives up to `DiveDepth` (8dp) below its resting spot, deep enough to disappear, and resurfaces under the new tab. The outline is convex, so `shadowElevation` works on every API level."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`selectedContentColor`",
+     "Icon and label of the selected tab"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`buoyColor`",
+     "The buoy (defaults to `selectedContentColor`)"
+    ]
+   ],
+   "signature": "fun BuoyBottomBar(\n    items: List<BuoyBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: BuoyBottomBarColors = BuoyBottomBarDefaults.colors(),\n    labelStyle: TextStyle = BuoyBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = BuoyBottomBarDefaults.windowInsets,\n)\n\nclass BuoyBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Floating",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.buoy"
+  },
+  {
+   "slug": "bloom",
+   "name": "Bloom",
+   "composable": "BloomBottomBar",
+   "summary": "Flat bar whose selected icon fills in on an accent orb that blooms out of it, with its label unrolling beside it.",
+   "highlight": "A flat bar of icon-only tabs. The selected icon fills in on an accent orb with its label beside it. On a new selection the orb blooms out of the icon with a little overshoot while the label unrolls, and the other tabs shift to make room",
+   "intro": [
+    "`BloomBarItem` has no center item: any tab can be selected. The bar only shows icons until a tab is selected; the selected one switches to its `selectedIcon` on an accent orb and shows its `label` beside it. The rest of the time `label` is read out by TalkBack."
+   ],
+   "usage": "val items = listOf(\n    BloomBarItem(\"Home\", Icons.Outlined.Home, Icons.Filled.Home),\n    BloomBarItem(\"Wallet\", Icons.Outlined.AccountBalanceWallet, Icons.Filled.AccountBalanceWallet),\n    BloomBarItem(\"Analysis\", Icons.Outlined.PieChart, Icons.Filled.PieChart),\n    BloomBarItem(\"Profile\", Icons.Outlined.Person, Icons.Filled.Person),\n)\n\nBloomBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n)",
+   "notes": [
+    {
+     "type": "p",
+     "text": "The bar is a flat, full-width `BarHeight` (72dp) strip. Tabs are spread edge to edge inside `ContentPadding` (24dp each side), so they shift over as the selected label unrolls. The orb is `OrbSize` (40dp) and the label sits `LabelSpacing` (8dp) from it."
+    }
+   ],
+   "colors": [
+    [
+     "`containerColor`",
+     "The bar"
+    ],
+    [
+     "`orbColor`",
+     "The orb behind the selected icon"
+    ],
+    [
+     "`orbContentColor`",
+     "The selected icon"
+    ],
+    [
+     "`unselectedContentColor`",
+     "Icons of the other tabs"
+    ],
+    [
+     "`labelColor`",
+     "The selected label (defaults to `orbColor`)"
+    ]
+   ],
+   "signature": "fun BloomBottomBar(\n    items: List<BloomBarItem>,\n    selectedIndex: Int,\n    onItemClick: (index: Int) -> Unit,\n    modifier: Modifier = Modifier,\n    colors: BloomBottomBarColors = BloomBottomBarDefaults.colors(),\n    labelStyle: TextStyle = BloomBottomBarDefaults.LabelStyle,\n    shadowElevation: Dp = 0.dp,\n    windowInsets: WindowInsets = BloomBottomBarDefaults.windowInsets,\n)\n\nclass BloomBarItem(\n    val label: String,\n    val icon: ImageVector,\n    val selectedIcon: ImageVector = icon,\n)",
+   "tags": [
+    "Edge to edge",
+    "Any tab",
+    "Icon only"
+   ],
+   "package": "com.nameisjayant.bottombar.bloom"
+  }
+ ],
+ "guide": {
+  "installation": [
+   {
+    "type": "p",
+    "text": "Compose Bottombar is published on [Maven Central](https://central.sonatype.com/artifact/io.github.nameisjayant/compose-bottombar). No extra repository is needed, just make sure `mavenCentral()` is listed (new Android projects include it by default):"
+   },
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "// settings.gradle.kts\ndependencyResolutionManagement {\n    repositories {\n        google()\n        mavenCentral()\n    }\n}"
+   },
+   {
+    "type": "p",
+    "text": "Then add the dependency:"
+   },
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "// app/build.gradle.kts\ndependencies {\n    implementation(\"io.github.nameisjayant:compose-bottombar:0.1.0\")\n}"
+   },
+   {
+    "type": "code",
+    "lang": "toml",
+    "code": "[versions]\ncomposeBottombar = \"0.1.0\"\n\n[libraries]\ncompose-bottombar = { group = \"io.github.nameisjayant\", name = \"compose-bottombar\", version.ref = \"composeBottombar\" }"
+   }
+  ],
+  "lightDark": [
+   {
+    "type": "p",
+    "text": "By default the bar follows `isSystemInDarkTheme()`. If your app has its own theme toggle, pass it in:"
+   },
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "HaloBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    colors = HaloBottomBarDefaults.colors(darkTheme = isDarkTheme),\n)"
+   }
+  ],
+  "customColors": [
+   {
+    "type": "p",
+    "text": "Start from either palette and override only what you need:"
+   },
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "HaloBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    colors = HaloBottomBarDefaults.lightColors(\n        containerColor = Color(0xFFFFF8F0),\n        selectedContentColor = Color(0xFFE85D3A),\n        unselectedContentColor = Color(0xFFB8A99A),\n        unselectedLabelColor = Color(0xFFB8A99A),\n        haloColor = Color(0xFFE85D3A),\n        haloRingColor = Color(0xFFFFC9B5),\n        haloContentColor = Color.White,\n    ),\n)"
+   }
+  ],
+  "labelStyle": [
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "HaloBottomBar(\n    items = items,\n    selectedIndex = selectedIndex,\n    onItemClick = { selectedIndex = it },\n    labelStyle = HaloBottomBarDefaults.LabelStyle.copy(fontSize = 12.sp, fontFamily = MyFont),\n    // The bar pads itself for the navigation bar by default. Pass zero insets when the parent already does.\n    windowInsets = WindowInsets(0.dp),\n)"
+   }
+  ],
+  "navigation": [
+   {
+    "type": "p",
+    "text": "The sample app gives each tab its own back stack with [Navigation 3](https://developer.android.com/guide/navigation/navigation-3), and switching tabs keeps every stack intact. Every bar is wired the same way:"
+   },
+   {
+    "type": "code",
+    "lang": "kotlin",
+    "code": "HaloBottomBar(\n    items = tabs.map { it.item },\n    selectedIndex = tabs.indexOfFirst { it.route == navigationState.topLevelRoute },\n    onItemClick = { index -> navigator.navigate(tabs[index].route) },\n)"
+   },
+   {
+    "type": "p",
+    "text": "See [`ShopTabsDemo.kt`](app/src/main/java/com/nameisjayant/composebottombar/demo/ShopTabsDemo.kt) for the full setup, shared by every bar's demo."
+   }
+  ],
+  "features": [
+   "**Ready to use**: pass a list of items and the selected index, and you get a finished bar.",
+   "**Light and dark built in**: every bar ships both palettes and follows the system theme by default.",
+   "**Animated by default**: icon swaps, spring bounces, color fades and bar-specific touches like the Halo burst, the Dome's sliding labels, the Cradle's orb ripple, the Valley's orb press, the Socket's gliding bubble, the Gable's bubble sliding along its roof line, the Diamond's quarter-turn spin, the Wave's rings filling into solid orbs, the Rail's rails growing around the selected tab, the Crest's orb popping up as its wings dip, the Scribble's loop drawing itself around the selected icon, the Bead hopping from notch to notch, the Peak's strip stretching from tab to tab, the Teardrop popping out of its pointed tip, the ring rippling out of the Orbit's orb, the Tile stretching as it slides from tab to tab, the Arch sinking into the bar's edge and springing up under the next tab, the Satellite dot circling its orb as it glides to the next tab, the Spotlight panel stretching and resizing to fit the next label, the comet sweeping around the Collar's ring, the Buoy diving under the edge and resurfacing below the next tab or the Bloom orb blooming out of the icon as its label unrolls.",
+   "**Customizable**: change any color through `XxxBottomBarDefaults.lightColors(...)` / `darkColors(...)`, plus label style and window insets.",
+   "**Accessible**: items are exposed as selectable tabs in a selectable group, so TalkBack reads them correctly.",
+   "**Light dependencies**: only Compose UI, Foundation and Animation. No Material, icons or navigation library is forced on your app.",
+   "**Explicit API mode**, so the public API is exactly what is meant to be public."
+  ]
+ }
+}
